@@ -55,3 +55,10 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+## Файлы конфигурации и кэша Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
