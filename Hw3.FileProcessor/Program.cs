@@ -21,6 +21,9 @@ internal class Program
 
             var processor = factory.Create(args);
 
+            Console.WriteLine("Синхронно - последовательно:");
+            processor.Process(args);
+            Console.WriteLine("Асинхронно - параллельно:");
             await processor.ProcessAsync(args);
         }
         catch (Exception ex)
