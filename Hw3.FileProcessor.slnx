@@ -1,4 +1,3 @@
 <Solution>
-  <Project Path="Hw3.FileProcessor.CLI/Hw3.FileProcessor.CLI.csproj" Id="b5020472-722a-4b5f-b21c-13896dc4206c" />
-  <Project Path="Hw3.FileProcessor.Core/Hw3.FileProcessor.Core.csproj" Id="a236d1fc-7ac7-46be-8b87-08efdf2d60f2" />
+  <Project Path="Hw3.FileProcessor/Hw3.FileProcessor.csproj" Id="b5020472-722a-4b5f-b21c-13896dc4206c" />
 </Solution>
