@@ -30,13 +30,31 @@ internal class DirectoryProcessorService : IDirectoryProcessorService
         string[] files = Directory.GetFiles(directoryPath);
         int totalSpaces = 0;
 
-        foreach (var file in files)
+        using var semaphoreSlim = new SemaphoreSlim(1, 2);
+
+        var tasks = files.Select(async file =>
         {
-            var filePath = Path.GetFullPath(file);
-            var spacesInFile = await _spaceCounterService.CountSpacesAsync(filePath);
-            totalSpaces += spacesInFile;
-            Console.WriteLine($"Файл: {filePath} | Пробелов: {spacesInFile}");
-        }
+            var filePath = Path.GetFileName(file);
+
+            await semaphoreSlim.WaitAsync();
+            try
+            {
+                int spacesInFile = await _spaceCounterService.CountSpacesAsync(file);                
+                Interlocked.Add(ref totalSpaces, spacesInFile);
+
+                Console.WriteLine($"Файл: {filePath} | Пробелов: {spacesInFile}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка файла {filePath}: {ex.Message}");
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+        });
+
+        await Task.WhenAll(tasks);
 
         Console.WriteLine($"Обработка завершена! Всего пробелов: {totalSpaces}");
     }

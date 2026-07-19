@@ -1,5 +1,6 @@
 using Hw3.FileProcessor.Services.ProcessorFactory;
 using Hw3.FileProcessor.Services.SpaceCounter;
+using static System.Net.WebRequestMethods;
 
 namespace Hw3.FileProcessor.Services.FilesProcessor;
 
@@ -29,18 +30,29 @@ internal class FilesProcessorService : IFilesProcessorService
 
         int totalSpaces = 0;
 
-        foreach (var filePath in filePaths)
+        using var semaphoreSlim = new SemaphoreSlim(1, 2);
+
+        var tasks = filePaths.Select(async filePath =>
         {
-            if (!File.Exists(filePath))
+            await semaphoreSlim.WaitAsync();
+            try
             {
-                continue;
+                int spacesInFile = await _spaceCounterService.CountSpacesAsync(filePath);
+                Interlocked.Add(ref totalSpaces, spacesInFile);
+
+                Console.WriteLine($"Файл: {filePath} | Пробелов: {spacesInFile}");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка файла {filePath}: {ex.Message}");
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+        });
 
-            int spacesInFile = await _spaceCounterService.CountSpacesAsync(filePath);
-            totalSpaces += spacesInFile;
-
-            Console.WriteLine($"Файл: {filePath} | Пробелов: {spacesInFile}");
-        }
+        await Task.WhenAll(tasks);
 
         Console.WriteLine($"Обработка завершена! Всего пробелов: {totalSpaces}");
     }
