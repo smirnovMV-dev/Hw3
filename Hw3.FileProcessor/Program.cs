@@ -23,6 +23,7 @@ internal class Program
 
             Console.WriteLine("Синхронно - последовательно:");
             processor.Process(args);
+            
             Console.WriteLine("Асинхронно - параллельно:");
             await processor.ProcessAsync(args);
         }
