@@ -9,7 +9,7 @@ public class HelpProcessorService : IHelpProcessorService
     public Task ProcessAsync(string[] args)
     => ShowHelp();
 
-    public Task Process(string[] args)
+    public void Process(string[] args)
     => ShowHelp();
 
     private static Task ShowHelp()
