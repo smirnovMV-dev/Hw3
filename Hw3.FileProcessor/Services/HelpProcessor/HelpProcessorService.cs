@@ -7,6 +7,12 @@ public interface IHelpProcessorService : IProcessor;
 public class HelpProcessorService : IHelpProcessorService
 {
     public Task ProcessAsync(string[] args)
+    => ShowHelp();
+
+    public Task Process(string[] args)
+    => ShowHelp();
+
+    private static Task ShowHelp()
     {
         Console.WriteLine("Параметры программы:");
         Console.WriteLine("  -d, -dir, --dir  ->  Обработать директорию");
