@@ -4,5 +4,5 @@ public interface IProcessor
 {
     Task ProcessAsync(string[] args);
 
-    Task Process(string[] args);
+    void Process(string[] args);
 }
