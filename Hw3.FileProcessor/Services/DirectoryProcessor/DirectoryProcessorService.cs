@@ -42,8 +42,6 @@ internal class DirectoryProcessorService : ProcessorBaseService, IDirectoryProce
             return;
         }
 
-        string[] filesPath = Directory.GetFiles(directoryPath);
-
-        ProcessBase(filesPath);
+        ProcessBase(Directory.GetFiles(directoryPath));
     }
 }

@@ -23,7 +23,7 @@ internal abstract class ProcessorBaseService
             try
             {
                 var spacesInFile = await _spaceCounterService.CountSpacesAsync(filePath);
-                totalSpaces += spacesInFile;
+                Interlocked.Add(ref totalSpaces, spacesInFile);
 
                 Console.WriteLine($"Файл: {filePath} | Пробелов: {spacesInFile}");
             }
